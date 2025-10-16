@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tipos de Datos PostgreSQL</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Space+Mono&display=swap');
+
+        @page {
+            size: letter;
+            margin: 0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: #1a1a2e;
+        }
+
+        .page {
+            width: 8.5in;
+            height: 11in;
+            background: linear-gradient(135deg, #16213e 0%, #1a1a2e 100%);
+            position: relative;
+            page-break-after: always;
+            overflow: hidden;
+        }
+
+        .page:last-child {
+            page-break-after: auto;
+        }
+
+        .grid-background {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: 
+                repeating-linear-gradient(0deg, transparent, transparent 20px, rgba(0, 191, 165, 0.03) 20px, rgba(0, 191, 165, 0.03) 22px),
+                repeating-linear-gradient(90deg, transparent, transparent 20px, rgba(0, 191, 165, 0.03) 20px, rgba(0, 191, 165, 0.03) 22px);
+            opacity: 0.5;
+        }
+
+        .page::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, #00bfa5, #5e72e4, #00bfa5);
+            z-index: 10;
+        }
+
+        .page-content {
+            position: relative;
+            z-index: 1;
+            padding: 60px 70px;
+            height: 100%;
+        }
+
+        .page-title {
+            font-size: 2.5em;
+            background: linear-gradient(135deg, #00bfa5 0%, #5e72e4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 50px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, #00bfa5, transparent);
+        }
+
+        .data-type {
+            background: rgba(94, 114, 228, 0.05);
+            padding: 22px 25px;
+            margin-bottom: 20px;
+            border: 2px solid rgba(0, 191, 165, 0.3);
+            position: relative;
+            clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 0 100%);
+        }
+
+        .data-type::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 12px;
+            height: 12px;
+            background: #00bfa5;
+            clip-path: polygon(0 0, 100% 0, 100% 100%);
+        }
+
+        .type-name {
+            font-size: 1.6em;
+            font-weight: 700;
+            color: #00bfa5;
+            margin-bottom: 5px;
+            font-family: 'Space Mono', monospace;
+            letter-spacing: 1px;
+        }
+
+        .type-alias {
+            font-size: 0.9em;
+            color: #5e72e4;
+            font-style: italic;
+            margin-bottom: 10px;
+            font-family: 'Space Mono', monospace;
+        }
+
+        .type-description {
+            color: #b0b8c1;
+            margin-bottom: 10px;
+            font-size: 0.95em;
+            line-height: 1.4;
+        }
+
+        .type-example {
+            background: #0f1419;
+            color: #00bfa5;
+            padding: 10px 15px;
+            border-left: 3px solid #5e72e4;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.8em;
+            position: relative;
+        }
+
+        .type-example::before {
+            content: '>';
+            position: absolute;
+            left: 5px;
+            color: #5e72e4;
+            font-weight: bold;
+        }
+
+        /* Intro page */
+        .intro-page {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            height: 100%;
+        }
+
+        .postgres-mark {
+            font-size: 8em;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00bfa5 0%, #5e72e4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 40px;
+            font-family: 'Space Mono', monospace;
+        }
+
+        .intro-title {
+            font-size: 4em;
+            background: linear-gradient(135deg, #00bfa5 0%, #5e72e4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 30px;
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            line-height: 1.2;
+        }
+
+        .intro-subtitle {
+            font-size: 1.4em;
+            color: #b0b8c1;
+            font-weight: 400;
+        }
+
+        .page-number {
+            position: absolute;
+            bottom: 30px;
+            right: 70px;
+            font-family: 'Space Mono', monospace;
+            color: #5e72e4;
+            font-size: 1em;
+            font-weight: 700;
+        }
+
+        .scanline {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(transparent 50%, rgba(0, 191, 165, 0.02) 50%);
+            background-size: 100% 4px;
+            pointer-events: none;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+    <!-- Page 1: Intro -->
+    <div class="page">
+        <div class="grid-background"></div>
+        <div class="scanline"></div>
+        <div class="page-content intro-page">
+            <div class="postgres-mark">PG</div>
+            <h1 class="intro-title">Dominios en Base de Datos<br>PostgreSQL</h1>
+            <p class="intro-subtitle">Estudiante: Vanesa Yupanqui </p>
+        </div>
+    </div>
+
+    <!-- Page 2: Tipos Numéricos Enteros -->
+    <div class="page">
+        <div class="grid-background"></div>
+        <div class="scanline"></div>
+        <div class="page-content">
+            <h2 class="page-title">Tipos Numéricos Enteros</h2>
+            
+            <div class="data-type">
+                <div class="type-name">INTEGER</div>
+                <div class="type-alias">(int, int4)</div>
+                <div class="type-description">Números enteros estándar para valores comunes</div>
+                <div class="type-example">edad INTEGER = 25;</div>
+            </div>
+
+            <div class="data-type">
+                <div class="type-name">SMALLINT</div>
+                <div class="type-alias">(int2)</div>
+                <div class="type-description">Números enteros pequeños, ahorra espacio</div>
+                <div class="type-example">cantidad SMALLINT = 100;</div>
+            </div>
+
+            <div class="data-type">
+                <div class="type-name">BIGINT</div>
+                <div class="type-alias">(int8)</div>
+                <div class="type-description">Números enteros muy grandes</div>
+                <div class="type-example">poblacion BIGINT = 7800000000;</div>
+            </div>
+            
+            <div class="page-number">02</div>
+        </div>
+    </div>
+
+    <!-- Page 3: Tipos Autoincrementales -->
+    <div class="page">
+        <div class="grid-background"></div>
+        <div class="scanline"></div>
+        <div class="page-content">
+            <h2 class="page-title">Tipos Autoincrementales</h2>
+            
+            <div class="data-type">
+                <div class="type-name">SERIAL</div>
+                <div class="type-alias">(serial4)</div>
+                <div class="type-description">Entero que se incrementa automáticamente</div>
+                <div class="type-example">id SERIAL PRIMARY KEY;</div>
+            </div>
+
+            <div class="data-type">
+                <div class="type-name">BIGSERIAL</div>
+                <div class="type-alias">(serial8)</div>
+                <div class="type-description">Entero grande con autoincremento</div>
+                <div class="type-example">codigo BIGSERIAL PRIMARY KEY;</div>
+            </div>
+            
+            <div class="page-number">03</div>
+        </div>
+    </div>
+
+    <!-- Page 4: Tipos de Punto Flotante -->
+    <div class="page">
+        <div class="grid-background"></div>
+        <div class="scanline"></div>
+        <div class="page-content">
+            <h2 class="page-title">Tipos de Punto Flotante</h2>
+            
+            <div class="data-type">
+                <div class="type-name">REAL</div>
+                <div class="type-alias">(float4)</div>
+                <div class="type-description">Números decimales de precisión simple</div>
+                <div class="type-example">temperatura REAL = 36.5;</div>
+            </div>
+
+            <div class="data-type">
+                <div class="type-name">DOUBLE PRECISION</div>
+                <div class="type-alias">(float8)</div>
+                <div class="type-description">Números decimales de alta precisión</div>
+                <div class="type-example">coordenada DOUBLE PRECISION = -78.4678935;</div>
+            </div>
+            
+            <div class="page-number">04</div>
+        </div>
+    </div>
+
+    <!-- Page 5: Tipos Numéricos Exactos -->
+    <div class="page">
+        <div class="grid-background"></div>
+        <div class="scanline"></div>
+        <div class="page-content">
+            <h2 class="page-title">Tipos Numéricos Exactos</h2>
+            
+            <div class="data-type">
+                <div class="type-name">NUMERIC</div>
+                <div class="type-alias">(decimal)</div>
+                <div class="type-description">Números decimales exactos con precisión definida</div>
+                <div class="type-example">precio NUMERIC(10,2) = 199.99;</div>
+            </div>
+
+            <div class="data-type">
+                <div class="type-name">DECIMAL</div>
+                <div class="type-alias">(numeric)</div>
+                <div class="type-description">Sinónimo de NUMERIC, ideal para dinero</div>
+                <div class="type-example">salario DECIMAL(8,2) = 1500.50;</div>
+            </div>
+            
+            <div class="page-number">05</div>
+        </div>
+    </div>
+
+    <!-- Page 6: Tipos de Caracteres -->
+    <div class="page">
+        <div class="grid-background"></div>
+        <div class="scanline"></div>
+        <div class="page-content">
+            <h2 class="page-title">Tipos de Caracteres y Texto</h2>
+            
+            <div class="data-type">
+                <div class="type-name">CHAR</div>
+                <div class="type-alias">(character)</div>
+                <div class="type-description">Texto de longitud fija</div>
+                <div class="type-example">codigo CHAR(3) = 'ABC';</div>
+            </div>
+
+            <div class="data-type">
+                <div class="type-name">VARCHAR</div>
+                <div class="type-alias">(character varying)</div>
+                <div class="type-description">Texto de longitud variable con límite</div>
+                <div class="type-example">nombre VARCHAR(50) = 'Juan Pérez';</div>
+            </div>
+
+            <div class="data-type">
+                <div class="type-name">TEXT</div>
+                <div class="type-alias">-</div>
+                <div class="type-description">Texto sin límite de longitud</div>
+                <div class="type-example">descripcion TEXT = 'Descripción larga...';</div>
+            </div>
+            
+            <div class="page-number">06</div>
+        </div>
+    </div>
+
+    <!-- Page 7: Tipos de Fecha y Hora (1) -->
+    <div class="page">
+        <div class="grid-background"></div>
+        <div class="scanline"></div>
+        <div class="page-content">
+            <h2 class="page-title">Tipos de Fecha y Hora (1/2)</h2>
+            
+            <div class="data-type">
+                <div class="type-name">DATE</div>
+                <div class="type-alias">-</div>
+                <div class="type-description">Solo fecha (año, mes, día)</div>
+                <div class="type-example">fecha_nacimiento DATE = '1990-05-15';</div>
+            </div>
+
+            <div class="data-type">
+                <div class="type-name">TIME</div>
+                <div class="type-alias">-</div>
+                <div class="type-description">Solo hora (sin fecha ni zona horaria)</div>
+                <div class="type-example">hora_inicio TIME = '14:30:00';</div>
+            </div>
+
+            <div class="data-type">
+                <div class="type-name">TIMESTAMP</div>
+                <div class="type-alias">-</div>
+                <div class="type-description">Fecha y hora sin zona horaria</div>
+                <div class="type-example">creado_en TIMESTAMP = '2025-10-15 14:30:00';</div>
+            </div>
+            
+            <div class="page-number">07</div>
+        </div>
+    </div>
+
+    <!-- Page 8: Tipos de Fecha y Hora (2) -->
+    <div class="page">
+        <div class="grid-background"></div>
+        <div class="scanline"></div>
+        <div class="page-content">
+            <h2 class="page-title">Tipos de Fecha y Hora (2/2)</h2>
+            
+            <div class="data-type">
+                <div class="type-name">TIMESTAMPTZ</div>
+                <div class="type-alias">(timestamp with time zone)</div>
+                <div class="type-description">Fecha y hora con zona horaria</div>
+                <div class="type-example">ultimo_acceso TIMESTAMPTZ = '2025-10-15 14:30:00-05';</div>
+            </div>
+
+            <div class="data-type">
+                <div class="type-name">INTERVAL</div>
+                <div class="type-alias">-</div>
+                <div class="type-description">Período o duración de tiempo</div>
+                <div class="type-example">duracion INTERVAL = '2 days 3 hours';</div>
+            </div>
+            
+            <div class="page-number">08</div>
+        </div>
+    </div>
+
+    <!-- Page 9: Tipo Lógico -->
+    <div class="page">
+        <div class="grid-background"></div>
+        <div class="scanline"></div>
+        <div class="page-content">
+            <h2 class="page-title">Tipo Lógico</h2>
+            
+            <div class="data-type">
+                <div class="type-name">BOOLEAN</div>
+                <div class="type-alias">(bool)</div>
+                <div class="type-description">Valores verdadero o falso</div>
+                <div class="type-example">activo BOOLEAN = true;</div>
+            </div>
+            
+            <div class="page-number">09</div>
+        </div>
+    </div>
+
+    <!-- Page 10: Tipos Especiales -->
+    <div class="page">
+        <div class="grid-background"></div>
+        <div class="scanline"></div>
+        <div class="page-content">
+            <h2 class="page-title">Tipos Especiales</h2>
+            
+            <div class="data-type">
+                <div class="type-name">UUID</div>
+                <div class="type-alias">-</div>
+                <div class="type-description">Identificador único universal</div>
+                <div class="type-example">id UUID = '550e8400-e29b-41d4-a716-446655440000';</div>
+            </div>
+
+            <div class="data-type">
+                <div class="type-name">JSONB</div>
+                <div class="type-alias">-</div>
+                <div class="type-description">Datos en formato JSON binario</div>
+                <div class="type-example">datos JSONB = '{"nombre": "Ana", "edad": 30}';</div>
+            </div>
+            
+            <div class="page-number">10</div>
+        </div>
+    </div>
+
+</body>
+</html>
