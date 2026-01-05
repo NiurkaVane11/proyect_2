@@ -3,91 +3,187 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Horario de Clases</title>
+    <title>Horario Académico</title>
     <style>
+      @import url("https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Playfair+Display:wght@500;700&display=swap");
+
       :root {
-        --azul: #1e3a8a;
-        --borde: #e2e8f0;
-        --fondo: #f5f7fa;
-        --celda: #f9fafb;
-        --hora: #f1f5f9;
-        --hover: #e0f2fe;
-        --almuerzo: #fde68a;
+        --rosa-oscuro: #e8d5d8;
+        --rosa-medio: #f5e6e8;
+        --crema: #fdfbfc;
+        --pergamino: #faf5f6;
+        --dorado: #f0d5d8;
+        --papel: #fffefe;
+        --tinta: #8b7479;
+        --sombra: rgba(232, 213, 216, 0.08);
       }
+
       * {
         box-sizing: border-box;
       }
+
       body {
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        background: var(--fondo);
+        font-family: "Crimson Text", serif;
+        background: linear-gradient(135deg, #fef9fa 0%, #fdf5f7 100%);
         margin: 0;
-        padding: 24px;
+        padding: 40px 24px;
+        color: var(--tinta);
       }
+
       h1 {
         text-align: center;
-        color: var(--azul);
-        margin: 0 0 18px;
-        letter-spacing: 0.3px;
+        color: var(--rosa-oscuro);
+        margin: 0 0 32px;
+        font-family: "Playfair Display", serif;
+        font-size: 2.2em;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
       }
+
       table {
         width: 100%;
+        max-width: 1400px;
+        margin: 0 auto;
         border-collapse: collapse;
-        background: #fff;
-        border-radius: 14px;
+        background: var(--papel);
+        border-radius: 4px;
         overflow: hidden;
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+        box-shadow: 0 8px 24px var(--sombra), 0 2px 8px rgba(0, 0, 0, 0.08);
+        border: 2px solid var(--dorado);
       }
+
       th,
       td {
-        border: 1px solid var(--borde);
+        border: 1px solid var(--dorado);
         text-align: center;
-        padding: 14px;
+        padding: 16px 12px;
       }
+
       th {
-        background: var(--azul);
-        color: #fff;
+        background: linear-gradient(180deg, #f5e6e8 0%, #fceef0 100%);
+        color: var(--tinta);
+        font-family: "Playfair Display", serif;
         font-weight: 600;
-        letter-spacing: 0.4px;
+        letter-spacing: 1.2px;
+        font-size: 1.05em;
+        text-transform: uppercase;
+        border-bottom: 3px solid var(--dorado);
       }
+
       td {
-        background: var(--celda);
-        transition: background 0.25s;
-        font-size: 14px;
-        line-height: 1.25em;
+        background: var(--papel);
+        transition: all 0.3s ease;
+        font-size: 15px;
+        line-height: 1.4em;
       }
+
       td:hover {
-        background: var(--hover);
+        background: var(--pergamino);
+        transform: translateY(-1px);
       }
+
       .hora {
-        background: var(--hora);
+        background: linear-gradient(135deg, #fef9fa 0%, #fdf5f7 100%);
         font-weight: 700;
-        color: #1f2937;
+        color: var(--tinta);
         width: 120px;
+        font-family: "Playfair Display", serif;
+        border-right: 2px solid var(--dorado);
       }
+
       .almuerzo {
-        background: var(--almuerzo) !important;
-        color: #78350f;
+        background: linear-gradient(
+          135deg,
+          #f5e6e8 0%,
+          #fceef0 100%
+        ) !important;
+        color: var(--tinta);
         font-weight: 700;
+        font-family: "Playfair Display", serif;
+        font-size: 1.1em;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        border-top: 2px solid var(--dorado);
+        border-bottom: 2px solid var(--dorado);
       }
-      /* Para múltiples materias en una misma celda */
+
       .item {
-        margin: 0.15rem 0;
-        padding: 0.2rem 0.4rem;
-        border-radius: 8px;
-        background: #ffffff80;
+        margin: 0.2rem 0;
+        padding: 0.4rem 0.6rem;
+        border-radius: 2px;
+        background: rgba(255, 255, 255, 0.3);
+        border-left: 3px solid transparent;
       }
+
       .nota {
-        opacity: 0.9;
         font-weight: 600;
+        color: var(--tinta);
+        font-style: italic;
       }
+
       .aula {
-        opacity: 0.8;
-        font-size: 12px;
+        opacity: 0.7;
+        font-size: 13px;
+        margin-top: 4px;
+        font-style: normal;
+        letter-spacing: 0.5px;
+      }
+
+      .estudio {
+        background: linear-gradient(
+          135deg,
+          #e8d5f5 0%,
+          #e0c9f0 100%
+        ) !important;
+      }
+
+      .estudio .item {
+        border-left-color: #f0e6f5;
+        background: rgba(253, 251, 252, 0.3);
+      }
+
+      .estudio .nota {
+        color: #7d6b8b;
+      }
+
+      .deberes {
+        background: linear-gradient(
+          135deg,
+          #fceef0 0%,
+          #fae8eb 100%
+        ) !important;
+      }
+
+      .deberes .item {
+        border-left-color: #fef9fa;
+        background: rgba(255, 254, 254, 0.3);
+      }
+
+      .deberes .nota {
+        color: #8b7479;
+      }
+
+      .fin-semana {
+        background: linear-gradient(
+          135deg,
+          #fef9fa 0%,
+          #fdf5f7 100%
+        ) !important;
+      }
+
+      .fin-semana .item {
+        border-left-color: var(--crema);
+        background: rgba(250, 245, 246, 0.3);
+      }
+
+      .fin-semana .nota {
+        color: var(--tinta);
       }
     </style>
   </head>
   <body>
-    <h1>Horario de Clases</h1>
+    <h1>Horario Académico</h1>
 
     <table>
       <thead>
@@ -103,192 +199,232 @@
       <tbody>
         <!-- 07-09 -->
         <tr>
-          <td class="hora">07:00 - 09:00</td>
-          <td></td>
-          <td></td>
-          <td>
+          <td class="hora">07:00<br />09:00</td>
+          <td class="estudio">
             <div class="item">
-              <div class="nota">Estructura de Datos y Algoritmos II</div>
-              <div class="aula">(E20-P4/E010)</div>
+              <div class="nota">Estudio: Redes</div>
+            </div>
+          </td>
+          <td class="estudio">
+            <div class="item">
+              <div class="nota">Estudio: Requerimientos</div>
             </div>
           </td>
           <td>
             <div class="item">
               <div class="nota">Estructura de Datos y Algoritmos II</div>
-              <div class="aula">(E20-P3/E004)</div>
+              <div class="aula">E20-P4/E010</div>
             </div>
           </td>
-          <td></td>
+          <td>
+            <div class="item">
+              <div class="nota">Estructura de Datos y Algoritmos II</div>
+              <div class="aula">E20-P3/E004</div>
+            </div>
+          </td>
+          <td class="deberes">
+            <div class="item">
+              <div class="nota">Hacer Deberes</div>
+            </div>
+          </td>
         </tr>
 
         <!-- 09-11 -->
         <tr>
-          <td class="hora">09:00 - 11:00</td>
+          <td class="hora">09:00<br />11:00</td>
           <td>
             <div class="item">
               <div class="nota">Fund. Sistemas de Información</div>
-              <div class="aula">(E20-P5/E010)</div>
+              <div class="aula">E20-P5/E010</div>
             </div>
           </td>
-          <td>
+          <td class="estudio">
             <div class="item">
-              <div class="nota">Academic I</div>
+              <div class="nota">Estudio: Bases de Datos</div>
             </div>
           </td>
-          <td>
+          <td class="deberes">
             <div class="item">
-              <div class="nota">Academic I</div>
+              <div class="nota">Hacer Deberes</div>
             </div>
           </td>
-          <td>
+          <td class="estudio">
             <div class="item">
-              <div class="nota">Academic I</div>
+              <div class="nota">Estudio: Algoritmos</div>
             </div>
           </td>
-          <td>
+          <td class="deberes">
             <div class="item">
-              <div class="nota">Academic I</div>
+              <div class="nota">Hacer Deberes</div>
             </div>
           </td>
         </tr>
 
         <!-- 11-13 -->
         <tr>
-          <td class="hora">11:00 - 13:00</td>
+          <td class="hora">11:00<br />13:00</td>
           <td>
             <div class="item">
               <div class="nota">Fund. Redes y Conectividad</div>
-              <div class="aula">(E20-P3/E004)</div>
+              <div class="aula">E20-P3/E004</div>
             </div>
           </td>
           <td>
             <div class="item">
               <div class="nota">Fund. Redes y Conectividad</div>
-              <div class="aula">(E20-P3/E004)</div>
+              <div class="aula">E20-P3/E004</div>
             </div>
           </td>
           <td>
             <div class="item">
               <div class="nota">Fund. Redes y Conectividad</div>
-              <div class="aula">(E20-P5/E010)</div>
+              <div class="aula">E20-P5/E010</div>
             </div>
           </td>
-          <td>
+          <td class="estudio">
             <div class="item">
-              <div class="nota"></div>
+              <div class="nota">Estudio: Redes</div>
             </div>
           </td>
           <td>
             <div class="item">
               <div class="nota">Fund. Sistemas de Información</div>
-              <div class="aula">(E20-P3/E010)</div>
+              <div class="aula">E20-P3/E010</div>
             </div>
           </td>
         </tr>
 
         <!-- 13-14 Almuerzo -->
         <tr>
-          <td class="hora">13:00 - 14:00</td>
+          <td class="hora">13:00<br />14:00</td>
           <td class="almuerzo" colspan="5">Almuerzo</td>
         </tr>
 
         <!-- 14-16 -->
         <tr>
-          <td class="hora">14:00 - 16:00</td>
+          <td class="hora">14:00<br />16:00</td>
           <td>
             <div class="item">
               <div class="nota">Ing. de Software y Requerimientos</div>
-              <div class="aula">(E20-P5/E002)</div>
+              <div class="aula">E20-P5/E002</div>
             </div>
           </td>
-          <td></td>
+          <td class="estudio">
+            <div class="item">
+              <div class="nota">Estudio: Requerimientos</div>
+            </div>
+          </td>
           <td>
             <div class="item">
               <div class="nota">Ing. de Software y Requerimientos</div>
-              <div class="aula">(E20-P3/E004)</div>
+              <div class="aula">E20-P3/E004</div>
             </div>
           </td>
           <td>
             <div class="item">
               <div class="nota">Semiótica</div>
-              <div class="aula">(SE-SA)</div>
+              <div class="aula">SE-SA</div>
             </div>
           </td>
           <td>
             <div class="item">
               <div class="nota">Ing. de Software y Requerimientos</div>
-              <div class="aula">(E20-P5/E002)</div>
+              <div class="aula">E20-P5/E002</div>
             </div>
           </td>
         </tr>
 
         <!-- 16-17 -->
         <tr>
-          <td class="hora">16:00 - 17:00</td>
-          <td>
+          <td class="hora">16:00<br />17:00</td>
+          <td class="estudio">
             <div class="item">
-              <div class="nota">Academic I</div>
+              <div class="nota">Estudio: Bases de Datos</div>
             </div>
           </td>
-          <td></td>
-          <td>
+          <td class="deberes">
             <div class="item">
-              <div class="nota"></div>
+              <div class="nota">Hacer Deberes</div>
             </div>
           </td>
-          <td></td>
-          <td></td>
+          <td class="estudio">
+            <div class="item">
+              <div class="nota">Estudio: Requerimientos</div>
+            </div>
+          </td>
+          <td class="deberes">
+            <div class="item">
+              <div class="nota">Hacer Deberes</div>
+            </div>
+          </td>
+          <td class="estudio">
+            <div class="item">
+              <div class="nota">Estudio: Sistemas</div>
+            </div>
+          </td>
         </tr>
 
         <!-- 17-18 -->
         <tr>
-          <td class="hora">17:00 - 18:00</td>
-          <td>
+          <td class="hora">17:00<br />18:00</td>
+          <td class="deberes">
             <div class="item">
-              <div class="nota">Academic I</div>
+              <div class="nota">Hacer Deberes</div>
             </div>
           </td>
-          <td>
+          <td class="estudio">
             <div class="item">
-              <div class="nota"></div>
+              <div class="nota">Estudio: Redes</div>
             </div>
           </td>
-          <td>
+          <td class="deberes">
             <div class="item">
-              <div class="nota"></div>
+              <div class="nota">Hacer Deberes</div>
             </div>
           </td>
-          <td>
+          <td class="estudio">
             <div class="item">
-              <div class="nota"></div>
+              <div class="nota">Estudio: Algoritmos</div>
             </div>
           </td>
-          <td></td>
+          <td class="estudio">
+            <div class="item">
+              <div class="nota">Estudio: Requerimientos</div>
+            </div>
+          </td>
         </tr>
 
         <!-- 18-20 -->
         <tr>
-          <td class="hora">18:00 - 20:00</td>
+          <td class="hora">18:00<br />20:00</td>
           <td>
             <div class="item">
               <div class="nota">Fund. Bases de Datos</div>
-              <div class="aula">(E20-P3/E003)</div>
+              <div class="aula">E20-P3/E003</div>
             </div>
           </td>
           <td>
             <div class="item">
               <div class="nota">Fund. Bases de Datos</div>
-              <div class="aula">(E20-P3/E003)</div>
+              <div class="aula">E20-P3/E003</div>
             </div>
           </td>
           <td>
             <div class="item">
               <div class="nota">Fund. Bases de Datos</div>
-              <div class="aula">(E20-P3/E003)</div>
+              <div class="aula">E20-P3/E003</div>
             </div>
           </td>
-          <td></td>
-          <td></td>
+          <td class="estudio">
+            <div class="item">
+              <div class="nota">Estudio: Requerimientos</div>
+            </div>
+          </td>
+          <td class="estudio">
+            <div class="item">
+              <div class="nota">Estudio: Redes</div>
+            </div>
+          </td>
         </tr>
       </tbody>
     </table>
